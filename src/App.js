@@ -3,9 +3,12 @@ import './style.css';
 import AddTodo from './AddTodo';
 import * as todoApi from './todoApi';
 import TodoList from './TodoList';
+import { themes } from './ThemeContext';
+import ThemeProvider from './ThemeProvider';
 
 export default function App() {
   const [todoList, setTodoList] = useState([]);
+  const [currTheme, setCurrTheme] = useState(themes.dark);
   console.log(todoList);
 
   const handleAdd = (value) => {
@@ -59,6 +62,12 @@ export default function App() {
     }
   };
 
+  const toggleTheme = () => {
+    currTheme === themes.dark
+      ? setCurrTheme(themes.light)
+      : setCurrTheme(themes.dark);
+  };
+
   useEffect(() => {
     todoApi.loadTodo().then((data) => {
       setTodoList(data.slice(0, 5));
@@ -66,15 +75,20 @@ export default function App() {
   }, []);
 
   return (
-    <div className="app-container">
-      <h1>Todo List with Fetched Data</h1>
-      <AddTodo toggleAdd={handleAdd} />
-      <TodoList
-        todoList={todoList}
-        toggleDelete={handleDelete}
-        toggleEdit={handleEdit}
-        toggleChecked={handleCheck}
-      />
-    </div>
+    <ThemeProvider>
+      <button className="mode-button" onClick={() => toggleTheme()}>
+        {currTheme === themes.dark ? 'Light Mode' : 'Dark Mode'}
+      </button>
+      <div className="app-container" style={currTheme}>
+        <h1>Todo List with Fetched Data</h1>
+        <AddTodo toggleAdd={handleAdd} />
+        <TodoList
+          todoList={todoList}
+          toggleDelete={handleDelete}
+          toggleEdit={handleEdit}
+          toggleChecked={handleCheck}
+        />
+      </div>
+    </ThemeProvider>
   );
 }
