@@ -76,9 +76,17 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <button className="mode-button" onClick={() => toggleTheme()}>
-        {currTheme === themes.dark ? 'Light Mode' : 'Dark Mode'}
-      </button>
+      <div
+        style={
+          currTheme === themes.dark
+            ? { background: 'dimgrey' }
+            : { background: 'powderBlue' }
+        }
+      >
+        <button className="mode-button" onClick={() => toggleTheme()}>
+          {currTheme === themes.dark ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
       <div className="app-container" style={currTheme}>
         <h1>Todo List with Fetched Data</h1>
         <AddTodo toggleAdd={handleAdd} />
